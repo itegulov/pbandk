@@ -1,9 +1,20 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
+buildscript {
+    repositories {
+        google()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle:3.5.0")
+    }
+}
+
 plugins {
     kotlin("multiplatform")
     `maven-publish`
 }
+apply(plugin = "com.android.library")
+apply(plugin = "kotlin-android-extensions")
 
 kotlin {
 
@@ -15,6 +26,31 @@ kotlin {
         useCommonJs()
         browser {}
         nodejs {}
+    }
+
+    android {
+        android {
+            compileSdkVersion 29
+            defaultConfig {
+                minSdkVersion 21
+                targetSdkVersion 29
+                versionCode 1
+                versionName '0.1'
+                testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+            }
+            sourceSets {
+                main {
+                    manifest.srcFile 'src/androidMain/AndroidManifest.xml'
+                    java.srcDirs = ['src/androidMain/kotlin']
+                    res.srcDirs = ['src/androidMain/res']
+                }
+                test {
+                    java.srcDirs = ['src/androidTest/kotlin']
+                    res.srcDirs = ['src/androidTest/res']
+                }
+            }
+            testOptions.unitTests.includeAndroidResources = true
+        }
     }
 
     iosArm64()
@@ -90,6 +126,12 @@ kotlin {
         val jsTest by getting {
             dependencies {
                 implementation(kotlin("test-js"))
+            }
+        }
+
+        val android by getting {
+            dependencies {
+                implementation("com.android.tools.build:gradle:4.0.1")
             }
         }
     }
