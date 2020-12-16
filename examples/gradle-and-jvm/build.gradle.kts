@@ -15,7 +15,6 @@ repositories {
         mavenLocal()
     }
     jcenter()
-    maven("https://dl.bintray.com/kotlin/kotlin-eap")
 }
 
 application {
@@ -24,7 +23,6 @@ application {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     implementation("pro.streem.pbandk:pbandk-runtime-jvm:$pbandkVersion")
 }
 
