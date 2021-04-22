@@ -13,7 +13,7 @@ kotlin {
         }
     }
 
-    js {
+    js(BOTH) {
         useCommonJs()
         browser {}
         nodejs {}
@@ -78,13 +78,5 @@ tasks {
         outputDir.set(project.file("src/commonMain/kotlin"))
         kotlinPackage.set("pbandk.conformance.pb")
         logLevel.set("debug")
-    }
-
-    // DCE is now enabled by default in Kotlin 1.3.7x
-    // and it doesn't work well with commonJS modules
-    // Use of commonJs could be removed since default module is now UMD
-    // but would require some code change
-    val processDceJsKotlinJs by getting {
-        enabled = false
     }
 }
