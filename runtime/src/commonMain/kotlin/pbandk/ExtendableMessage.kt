@@ -1,6 +1,9 @@
 package pbandk
 
+import kotlin.js.JsExport
+
 @Suppress("UNCHECKED_CAST")
+@JsExport
 interface ExtendableMessage : Message {
     @PublicForGeneratedCode
     val extensionFields: AtomicReference<Map<Int, Any>>

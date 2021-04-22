@@ -5,7 +5,11 @@ import pbandk.internal.binary.BinaryMessageEncoder
 import pbandk.internal.binary.BinaryMessageDecoder
 import pbandk.internal.binary.allocate
 import pbandk.internal.binary.fromByteArray
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
 
+@OptIn(ExperimentalJsExport::class)
+@JsExport
 interface Message {
     val unknownFields: Map<Int, UnknownField>
 
@@ -41,13 +45,17 @@ interface Message {
 
 }
 
+@JsExport
 fun <T : Message> T.encodeWith(m: MessageEncoder): Unit = m.writeMessage(this)
 
+@JsExport
 fun <T : Message> T.encodeToByteArray(): ByteArray =
     BinaryMessageEncoder.allocate(protoSize).also { encodeWith(it) }.toByteArray()
 
+@JsExport
 fun <T : Message> Message.Companion<T>.decodeFromByteArray(arr: ByteArray): T =
     decodeWith(BinaryMessageDecoder.fromByteArray(arr))
 
 @Suppress("UNCHECKED_CAST")
+@JsExport
 operator fun <T : Message> T?.plus(other: T?): T? = this?.plus(other) as T? ?: other
