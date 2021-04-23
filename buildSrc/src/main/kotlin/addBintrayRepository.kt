@@ -23,8 +23,8 @@ fun PublishingExtension.addBintrayRepository(project: Project, publication: Mave
     val mavenRepo = repositories.maven {
         name = "bintray$camelCaseArtifactId"
 
-        val bintrayUser = "streem"
-        val bintrayRepo = "pbandk"
+        val bintrayUser = "itegulov"
+        val bintrayRepo = "maven"
         val bintrayPackage = "${publication.groupId}:${publication.artifactId}"
         url = URI("https://api.bintray.com/maven/$bintrayUser/$bintrayRepo/$bintrayPackage/;publish=1")
 
