@@ -19,6 +19,7 @@ It is built to work across multiple Kotlin platforms.
 * Specialized support to handle wrappers from the well-known types (e.g. `StringValue`, `BoolValue`) as nullable primitives (`String?`, `Boolean?`, etc.)
 * JVM platform leverages [Protobuf's Java library](https://developers.google.com/protocol-buffers/docs/javatutorial) for best performance
 * JS platform leverages [protobuf.js](https://github.com/dcodeIO/ProtoBuf.js/) for best performance
+* Support for exporting `.d.ts` declarations for JS platform by supplying `js_export=true` parameter
 * Support for custom service/gRPC code generator
 * Support for [custom options](https://developers.google.com/protocol-buffers/docs/proto#customoptions)
 

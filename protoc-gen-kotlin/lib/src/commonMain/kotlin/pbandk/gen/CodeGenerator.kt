@@ -6,7 +6,7 @@ import pbandk.wkt.FieldOptions
 open class CodeGenerator(
     val file: File,
     val kotlinTypeMappings: Map<String, String>,
-    @Suppress("unused") val params: Map<String, String>
+    val params: Map<String, String>
 ) {
     protected val bld = StringBuilder()
     protected var indent = ""
@@ -14,6 +14,7 @@ open class CodeGenerator(
     fun generate(): String {
         line("@file:OptIn(pbandk.PublicForGeneratedCode::class)").line()
         file.kotlinPackageName?.let { line("package $it") }
+        if (params["js_export"] == "true") line().line("import kotlin.js.JsExport")
         file.types.forEach { writeType(it) }
         file.extensions.forEach { writeExtension(it) }
         file.types.filterIsInstance<File.Type.Message>().forEach { writeMessageExtensions(it) }
@@ -65,7 +66,9 @@ open class CodeGenerator(
         val parentPrefix = parentType?.let { "${it}." }.orEmpty()
         val typeName = "${parentPrefix}${type.kotlinTypeName}"
         // Enums are sealed classes w/ a value and a name, and a companion object with all values
-        line().line("sealed class ${type.kotlinTypeName}(override val value: Int, override val name: String? = null) : pbandk.Message.Enum {")
+        line()
+        if (params["js_export"] == "true" && parentType == null) line("@JsExport")
+        line("sealed class ${type.kotlinTypeName}(override val value: Int, override val name: String? = null) : pbandk.Message.Enum {")
             .indented {
                 line("override fun equals(other: kotlin.Any?) = other is ${typeName} && other.value == value")
                 line("override fun hashCode() = value.hashCode()")
@@ -92,7 +95,9 @@ open class CodeGenerator(
 
         if (type.mapEntry) messageInterface += ", Map.Entry<${type.mapEntryKeyKotlinType}, ${type.mapEntryValueKotlinType}>"
 
-        line().line("data class ${type.kotlinTypeName}(").indented {
+        line()
+        if (params["js_export"] == "true" && parentType == null) line("@JsExport")
+        line("data class ${type.kotlinTypeName}(").indented {
             val fieldBegin = if (type.mapEntry) "override " else ""
             type.fields.forEach { field ->
                 when (field) {
